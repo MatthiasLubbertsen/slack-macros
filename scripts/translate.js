@@ -1,0 +1,1 @@
+// translates the message or word to English form every language with 

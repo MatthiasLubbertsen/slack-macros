@@ -1,0 +1,17 @@
+{
+    "commands": [
+        {
+            "abbreviation": "ft hc",
+            "name": "Flavortown Happy Cooking",
+            "description": "Send message with 'Happy Cooking! :cook:'",
+            "script": null,
+            "respond_uo": "Happy Cooking! :cook:"
+        },
+        {
+            "abbreviation": "tl",
+            "name": "Translate",
+            "description": "Translate the given text to English using a OpenRouter compatible API",
+            "script": "scripts/translate.js"
+        }
+    ]
+}
