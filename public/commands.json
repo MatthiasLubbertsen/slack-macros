@@ -5,7 +5,7 @@
             "name": "Flavortown Happy Cooking",
             "description": "Send message with 'Happy Cooking! :cook:'",
             "script": null,
-            "respond_uo": "Happy Cooking! :cook:"
+            "respond_au": "Happy Cooking! :cook:"
         },
         {
             "abbreviation": "tl",
