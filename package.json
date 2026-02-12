@@ -1,0 +1,23 @@
+{
+  "name": "slack-help",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "wrangler": "^4.65.0"
+  },
+  "scripts": {
+    "dev": "wrangler dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthiasLubbertsen/slack-help.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatthiasLubbertsen/slack-help/issues"
+  },
+  "homepage": "https://github.com/MatthiasLubbertsen/slack-help#readme",
+  "description": ""
+}
