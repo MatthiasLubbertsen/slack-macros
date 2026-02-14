@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const commandsDiv = document.querySelector('.commands');
 
     try {
-        const response = await fetch('/api/commands');
+        const response = await fetch('/api/json/commands');
         const data = await response.json();
 
         if (data.commands) {

@@ -1,23 +1,24 @@
 {
-  "name": "slack-help",
+  "name": "slack-macros",
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
     "wrangler": "^4.65.0"
   },
   "scripts": {
+    "start": "npm run dev",
     "dev": "wrangler dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MatthiasLubbertsen/slack-help.git"
+    "url": "git+https://github.com/MatthiasLubbertsen/slack-macros.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MatthiasLubbertsen/slack-help/issues"
+    "url": "https://github.com/MatthiasLubbertsen/slack-macros/issues"
   },
-  "homepage": "https://github.com/MatthiasLubbertsen/slack-help#readme",
+  "homepage": "https://slack-macros.matthiaslubbertsen.workers.dev/",
   "description": ""
 }
