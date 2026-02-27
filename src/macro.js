@@ -49,6 +49,7 @@ export default async function handleMacro(request, env, ctx) {
     try {
       const macroJson = await macros.json();
       const matchedMacro = macroJson.commands.find(cmd => cmd.abbreviation === macro);
+      
       if (!macro) {
         await sendResponseUserOnly(`Hey, see all macros on <https://slack-macros.matthiaslubbertsen.workers.dev|the website> and test one out! :smile-with-7-parenthesis-no-less-no-more:`);
       } else if (!matchedMacro) {
@@ -57,7 +58,7 @@ export default async function handleMacro(request, env, ctx) {
       } 
 
       if (matchedMacro) {
-        if (matchedMacro.script === null) {
+        if (matchedMacro.script == null) {
           if (matchedMacro.respondAsUser) {
             await sendResponseAsUser(matchedMacro.respondAsUser);
           } else if (matchedMacro.respondUserOnly) {

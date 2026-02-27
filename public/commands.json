@@ -10,15 +10,16 @@
         {
             "abbreviation": "gl",
             "name": "Good Luck",
-            "description": "Send message with 'Good Luck! :four_leaf_clover:'",
+            "description": "Send message with 'Good Luck!'",
             "script": null,
             "respondAsUser": "Good Luck!"
         },
         {
-                "abbreviation": "test",
-                "name": "i love testing",
-                "description": "Testing user only response",
-                "respondUserOnly": "Testing user only response!"
+            "abbreviation": "test",
+            "name": "i love testing",
+            "description": "Testing user only response",
+            "script": null,
+            "respondUserOnly": "Testing user only response!"
         },
         {
             "abbreviation": "tl",
