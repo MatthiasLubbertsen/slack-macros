@@ -1,1 +1,1 @@
-// translates the message or word to English form every language with 
+// translates the message or word to English form every language with ai.hackclub.com

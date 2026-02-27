@@ -5,7 +5,20 @@
             "name": "Flavortown Happy Cooking",
             "description": "Send message with 'Happy Cooking! :cook:'",
             "script": null,
-            "respond_au": "Happy Cooking! :cook:"
+            "respondAsUser": "Happy Cooking! :cook:"
+        },
+        {
+            "abbreviation": "gl",
+            "name": "Good Luck",
+            "description": "Send message with 'Good Luck! :four_leaf_clover:'",
+            "script": null,
+            "respondAsUser": "Good Luck!"
+        },
+        {
+                "abbreviation": "test",
+                "name": "i love testing",
+                "description": "Testing user only response",
+                "respondUserOnly": "Testing user only response!"
         },
         {
             "abbreviation": "tl",

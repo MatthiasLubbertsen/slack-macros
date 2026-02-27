@@ -8,7 +8,7 @@ export default async function handleMacro(request, env, ctx) {
   const macros = await env.ASSETS.fetch(new URL("/commands.json", request.url));
   console.log("Received macro:", body.text);
 
-  async function sendSlackResponseUserOnly(message) {
+  async function sendResponseUserOnly(message) {
     await fetch(body.response_url, {
       method: 'POST',
       headers: {
@@ -20,14 +20,14 @@ export default async function handleMacro(request, env, ctx) {
     });
   };
 
-  async function sendSlackResponseAsUser(message) {
+  async function sendResponseAsUser(message) {
     const userInfoResponse = await fetch(`https://slack.com/api/users.info?user=${body.user_id}`, {
       headers: {
         'Authorization': `Bearer ${env.SLACK_BOT_TOKEN}`,
       }
     });
     const userInfo = await userInfoResponse.json();
-    const username = userInfo.user.profile.display_name || userInfo.user.name || data.user_name;
+    const username = userInfo.user.profile.display_name || userInfo.user.name || body.user_name;
     const profileImage = userInfo.user.profile.image_72 || userInfo.user.profile.image_48 || userInfo.user.profile.image_192;
 
     await fetch("https://slack.com/api/chat.postMessage", {
@@ -45,37 +45,31 @@ export default async function handleMacro(request, env, ctx) {
     })
   };
 
-  //Use ctx.waitUntil to keep the worker running after returning the response
-  // ctx.waitUntil((async () => {
-  //   if (!macro) {
-  //     console.error("no macro")
-  //     sendSlackResponseUO("You have not entered a macro you dumbass, please provide one.");
-  //   } else {
-  //     // copilot generated (but modified by me)
-  //     const json = await macros.json();
-  //     const command = json.commands.find(c => c.abbreviation === macro);
-  //     if (command && command.script) {
-  //       const script = scripts[command.abbreviation];
-  //       if (script) {
-  //         console.log(`Running script: ${command.script}`);
-  //         await script(request, env, ctx);
-  //         if (body.response_url) {
-  //           sendSlackResponseUO(`Macro executed: ${macro}`);
-  //         }
-  //       } else {
-  //         console.error(`Script not found: ${command.script}`);
-  //         sendSlackResponseUO(`Script not found: ${command.script}`);
-  //       }
-  //     } else {
-  //       console.log(`Command not found: ${macro}`);
-  //       sendSlackResponseUO(`Command not found: ${macro}`);
-  //     }
-  //   }
-  //   // end copilot generated
-  // })());
+  ctx.waitUntil((async () => {
+    try {
+      const macroJson = await macros.json();
+      const matchedMacro = macroJson.commands.find(cmd => cmd.abbreviation === macro);
+      if (!macro) {
+        await sendResponseUserOnly(`Hey, see all macros on <https://slack-macros.matthiaslubbertsen.workers.dev|the website> and test one out! :smile-with-7-parenthesis-no-less-no-more:`);
+      } else if (!matchedMacro) {
+        await sendResponseUserOnly(`Unknown macro: ${macro}`);
+        return;
+      } 
 
-  await sendSlackResponseAsUser("Macro processing complete. :) Macro: " + macro);
-  await sendSlackResponseUserOnly("recieved macro: " + macro)
+      if (matchedMacro) {
+        if (matchedMacro.script === null) {
+          if (matchedMacro.respondAsUser) {
+            await sendResponseAsUser(matchedMacro.respondAsUser);
+          } else if (matchedMacro.respondUserOnly) {
+            await sendResponseUserOnly(matchedMacro.respondUserOnly);
+          }
+        }
+      }
+    } catch (error) {
+      await sendResponseUserOnly(`Unknown macro: ${macro}`);
+      return;
+    }
+  })());
 
   return new Response("", { status: 200 });
 };
