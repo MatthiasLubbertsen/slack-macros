@@ -12,7 +12,15 @@ export default {
 
     // commands endpoint
     if (url.pathname === "/api/macro") {
-      return handleMacro(request, env, ctx);
+      if (request.method !== "POST") {
+        return new Response("Method not allowed", { status: 405 });
+      }
+
+      let response = await handleMacro(request, env, ctx);
+      // Log useful details instead of an empty JSON object from Response
+      const clone = response.clone();
+      const body = await clone.text();
+      return response;
     }
 
     // frontend assets

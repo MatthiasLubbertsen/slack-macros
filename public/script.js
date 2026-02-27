@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             data.commands.forEach(command => {
                 const li = document.createElement('li');
                 li.className = 'flex items-baseline group p-2 -mx-2 rounded-lg transition-all duration-200 cursor-default';
-                li.innerHTML = `<code class="flex-none text-pink-400 bg-pink-400/10 px-2 py-0.5 rounded text-sm font-mono mr-3 border border-pink-400/20 group-hover:border-pink-400/40 group-hover:bg-pink-400/15 transition-colors duration-200">/sh ${command.abbreviation}</code> <span class="text-slate-300 text-sm md:text-base group-hover:text-slate-200 transition-colors">${command.description}</span>`;
+                li.innerHTML = `<code class="flex-none text-pink-400 bg-pink-400/10 px-2 py-0.5 rounded text-sm font-mono mr-3 border border-pink-400/20 group-hover:border-pink-400/40 group-hover:bg-pink-400/15 transition-colors duration-200">/slam ${command.abbreviation}</code> <span class="text-slate-300 text-sm md:text-base group-hover:text-slate-200 transition-colors">${command.description}</span>`;
                 ul.appendChild(li);
             });
 

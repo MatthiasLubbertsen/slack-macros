@@ -6,8 +6,9 @@
     "wrangler": "^4.65.0"
   },
   "scripts": {
-    "start": "npm run dev",
-    "dev": "wrangler dev"
+    "gen": "node tools/generate-scripts.js",
+    "start": "npm run gen && npm run dev",
+    "dev": "npm run gen && wrangler dev"
   },
   "repository": {
     "type": "git",

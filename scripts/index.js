@@ -1,0 +1,1 @@
+export * as translate from './translate.js';
