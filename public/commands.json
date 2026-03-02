@@ -16,8 +16,8 @@
         },
         {
             "abbreviation": "test",
-            "name": "i love testing",
-            "description": "Testing user only response",
+            "name": "testing",
+            "description": "i love testing",
             "script": null,
             "respondUserOnly": "Testing user only response!"
         },
