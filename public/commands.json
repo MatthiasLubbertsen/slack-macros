@@ -26,6 +26,13 @@
             "name": "Translate",
             "description": "Translate the given text to English using HackAI.",
             "script": "scripts/translate.js"
+        },
+        {
+            "abbreviation": "hi",
+            "name": "hi",
+            "description": "silly joke",
+            "script": null,
+            "respondAsUser": "hii :rac_yap:"
         }
     ]
 }

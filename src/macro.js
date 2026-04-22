@@ -63,7 +63,7 @@ export default async function handleMacro(request, env, ctx) {
           .join('\n');
 
         const message =
-          `Hey, you did not enter a command, try one of these:\n` +
+          `Hey, you did not enter a macro, try one of these:\n` +
           `${commandList}\n` +
           `or others, see the full list <https://slack-macros.matthiaslubbertsen.workers.dev|here>!`;
 
