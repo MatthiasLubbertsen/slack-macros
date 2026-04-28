@@ -12,7 +12,7 @@ try {
 
   const content = files.map(file => {
     const name = path.basename(file, '.js');
-    return `export * as ${name} from './${file}';`;
+    return `export { default as ${name} } from './${file}';`;
   }).join('\n');
 
   fs.writeFileSync(outputFile, content);

@@ -48,11 +48,18 @@ export default async function handleMacro(request, env, ctx) {
   };
 
   ctx.waitUntil((async () => {
-    try {
+    console.log(":51")
       const macroJson = await macros.json();
-      const matchedMacro = macroJson.commands.find(cmd => cmd.abbreviation === macro);
+      const [macroKey, ...args] = (body.text || "").trim().split(/\s+/);
+    try {
+      // copilot: line 53, 56
+      const matchedMacro = macroJson.commands.find(cmd => cmd.abbreviation === macroKey);
+      console.log(":57", macroKey, args)
+      const inputText = args.join(' ');
+      console.log(":69", inputText)
+      console.log("macroKey:", macroKey, "inputText:", inputText);
       
-      if (!macro) {
+      if (!macroKey) { // no macro entered = list
         const commandList = macroJson.commands
           .slice(0, 3)
           .map((cmd) => {
@@ -66,10 +73,9 @@ export default async function handleMacro(request, env, ctx) {
           `Hey, you did not enter a macro, try one of these:\n` +
           `${commandList}\n` +
           `or others, see the full list <https://slack-macros.matthiaslubbertsen.workers.dev|here>!`;
-
         await sendResponseUserOnly(message);
-      } else if (!matchedMacro) {
-        await sendResponseUserOnly(`Unknown macro: ${macro}`);
+      } else if (!matchedMacro) { // no macro found
+        await sendResponseUserOnly(`Unknown macro: ${macroKey}`);
         return;
       }
 
@@ -81,7 +87,7 @@ export default async function handleMacro(request, env, ctx) {
             await sendResponseUserOnly(matchedMacro.respondUserOnly);
           }
         } else if (scripts[matchedMacro.script]) {
-          const response = await scripts[matchedMacro.script](body, env);
+          const response = await scripts[matchedMacro.script](body, env, inputText);
           if (response.respondAsUser) {
             await sendResponseAsUser(response.respondAsUser);
           } else if (response.respondUserOnly) {
@@ -90,7 +96,8 @@ export default async function handleMacro(request, env, ctx) {
         }
       }
     } catch (error) {
-      await sendResponseUserOnly(`Unknown macro: ${macro}`);
+      await sendResponseUserOnly(`Unknown macro: ${macroKey}`);
+      console.error("Error handling macro:", error);
       return;
     }
   })());

@@ -1,1 +1,1 @@
-export * as translate from './translate.js';
+export { default as translate } from './translate.js';

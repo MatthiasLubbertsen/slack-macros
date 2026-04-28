@@ -8,7 +8,8 @@
   "scripts": {
     "gen": "node tools/generate-scripts.js",
     "start": "npm run gen && npm run dev",
-    "dev": "npm run gen && wrangler dev"
+    "dev": "npm run gen && wrangler dev",
+    "deploy": "npm run gen && wrangler deploy"
   },
   "repository": {
     "type": "git",

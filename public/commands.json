@@ -25,12 +25,12 @@
             "abbreviation": "tl",
             "name": "Translate",
             "description": "Translate the given text to English using HackAI.",
-            "script": "scripts/translate.js"
+            "script": "translate"
         },
         {
             "abbreviation": "hi",
             "name": "hi",
-            "description": "silly joke",
+            "description": "silly message",
             "script": null,
             "respondAsUser": "hii :rac_yap:"
         }
