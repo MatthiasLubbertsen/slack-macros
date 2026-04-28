@@ -4,34 +4,34 @@
             "abbreviation": "hc",
             "name": "Flavortown Happy Cooking",
             "description": "Send message with 'Happy Cooking! :cook:'",
-            "script": null,
+            "function": null,
             "respondAsUser": "Happy Cooking! :cook:"
         },
         {
             "abbreviation": "gl",
             "name": "Good Luck",
             "description": "Send message with 'Good Luck!'",
-            "script": null,
+            "function": null,
             "respondAsUser": "Good Luck!"
         },
         {
             "abbreviation": "test",
             "name": "testing",
             "description": "i love testing",
-            "script": null,
+            "function": null,
             "respondUserOnly": "Testing user only response!"
         },
         {
             "abbreviation": "tl",
             "name": "Translate",
             "description": "Translate the given text to English using HackAI.",
-            "script": "translate"
+            "function": "translate"
         },
         {
             "abbreviation": "hi",
             "name": "hi",
             "description": "silly message",
-            "script": null,
+            "function": null,
             "respondAsUser": "hii :rac_yap:"
         }
     ]

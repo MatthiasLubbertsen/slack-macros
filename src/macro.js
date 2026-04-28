@@ -1,4 +1,4 @@
-import * as scripts from '../scripts/index.js';
+import * as functions from '../functions/index.js';
 
 export default async function handleMacro(request, env, ctx) {
   const text = await request.text();
@@ -48,16 +48,16 @@ export default async function handleMacro(request, env, ctx) {
   };
 
   ctx.waitUntil((async () => {
-    console.log(":51")
+    // console.log(":51")
       const macroJson = await macros.json();
       const [macroKey, ...args] = (body.text || "").trim().split(/\s+/);
     try {
       // copilot: line 53, 56
       const matchedMacro = macroJson.commands.find(cmd => cmd.abbreviation === macroKey);
-      console.log(":57", macroKey, args)
+      // console.log(":57", macroKey, args)
       const inputText = args.join(' ');
-      console.log(":69", inputText)
-      console.log("macroKey:", macroKey, "inputText:", inputText);
+      // console.log(":69", inputText)
+      // console.log("macroKey:", macroKey, "inputText:", inputText);
       
       if (!macroKey) { // no macro entered = list
         const commandList = macroJson.commands
@@ -80,14 +80,14 @@ export default async function handleMacro(request, env, ctx) {
       }
 
       if (matchedMacro) {
-        if (matchedMacro.script == null) {
+        if (matchedMacro.function == null) {
           if (matchedMacro.respondAsUser) {
             await sendResponseAsUser(matchedMacro.respondAsUser);
           } else if (matchedMacro.respondUserOnly) {
             await sendResponseUserOnly(matchedMacro.respondUserOnly);
           }
-        } else if (scripts[matchedMacro.script]) {
-          const response = await scripts[matchedMacro.script](body, env, inputText);
+        } else if (functions[matchedMacro.function]) {
+          const response = await functions[matchedMacro.function](body, env, inputText);
           if (response.respondAsUser) {
             await sendResponseAsUser(response.respondAsUser);
           } else if (response.respondUserOnly) {
