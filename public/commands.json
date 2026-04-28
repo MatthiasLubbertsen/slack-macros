@@ -28,6 +28,12 @@
             "function": "translate"
         },
         {
+            "abbreviation": "ai",
+            "name": "AI answer",
+            "description": "Get a answer from a ai model for the given question using HackAI.",
+            "function": "getAnswer"
+        },
+        {
             "abbreviation": "hi",
             "name": "hi",
             "description": "silly message",

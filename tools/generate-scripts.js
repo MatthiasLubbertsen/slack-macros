@@ -4,10 +4,11 @@ const path = require('node:path');
 
 const functionsDir = path.join(__dirname, '../functions');
 const outputFile = path.join(functionsDir, 'index.js');
+const ignoreFiles = ['index.js', 'template.js'];
 
 try {
   const files = fs.readdirSync(functionsDir)
-    .filter(file => file.endsWith('.js') && file !== 'index.js');
+    .filter(file => file.endsWith('.js') && !ignoreFiles.includes(file));
 
   const content = files.map(file => {
     const name = path.basename(file, '.js');
