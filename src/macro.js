@@ -1,35 +1,96 @@
+// copilot: switch from /commands to @mentions
 import * as functions from '../functions/index.js';
 
 export default async function handleMacro(request, env, ctx) {
-  const text = await request.text();
-  const formData = new URLSearchParams(text);
-  const body = Object.fromEntries(formData);
-  const macro = body.text;
-  const macros = await env.ASSETS.fetch(new URL("/commands.json", request.url));
-  console.log("Received macro:", (macro) ? body.text : "No macro received");
+  const contentType = request.headers.get("content-type") || "";
+  let body = {};
+  let macroText = "";
+  let isSlashCommand = false;
 
+  // 1. Handle JSON Payloads (Events API such as @handle)
+  if (contentType.includes("application/json")) {
+    body = await request.json();
+    
+    // Respond to Slack's URL verification challenge
+    if (body.type === "url_verification") {
+      return new Response(body.challenge, { status: 200 });
+    }
+
+    // Process app_mention events
+    if (body.event && body.event.type === "app_mention") {
+      // Clean up the @bot handle from the text
+      macroText = body.event.text.replace(/<@U[a-zA-Z0-9]+>/g, '').trim();
+    }
+  } 
+  // 2. Handle Form Data (Traditional Slash Commands)
+  else {
+    const text = await request.text();
+    const formData = new URLSearchParams(text);
+    body = Object.fromEntries(formData);
+    macroText = body.text;
+    isSlashCommand = true;
+  }
+
+  const macro = macroText;
+  const macros = await env.ASSETS.fetch(new URL("/commands.json", request.url));
+  console.log("Received macro:", macro || "No macro received");
+  
   async function sendResponseUserOnly(message) {
-    await fetch(body.response_url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        response_type: "ephemeral", text: `${message}`,
-        mrkdwn: true
-      }),
-    });
+    if (body.response_url) {
+      await fetch(body.response_url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          response_type: "ephemeral", text: `${message}`,
+          mrkdwn: true
+        }),
+      });
+    } else if (body.event) {
+      await fetch("https://slack.com/api/chat.postEphemeral", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${env.SLACK_BOT_TOKEN}`,
+        },
+        body: JSON.stringify({
+          channel: body.event.channel,
+          user: body.event.user,
+          text: `${message}`,
+          thread_ts: body.event.ts,
+          mrkdwn: true
+        }),
+      });
+    }
   };
 
   async function sendResponseAsUser(message) {
-    const userInfoResponse = await fetch(`https://slack.com/api/users.info?user=${body.user_id}`, {
+    const userId = body.user_id || (body.event && body.event.user);
+    const channelId = body.channel_id || (body.event && body.event.channel);
+    const threadTs = body.event && body.event.ts;
+    const defaultName = body.user_name || "User";
+
+    const userInfoResponse = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
       headers: {
         'Authorization': `Bearer ${env.SLACK_BOT_TOKEN}`,
       }
     });
     const userInfo = await userInfoResponse.json();
-    const username = userInfo.user.profile.display_name || userInfo.user.name || body.user_name;
-    const profileImage = userInfo.user.profile.image_72 || userInfo.user.profile.image_48 || userInfo.user.profile.image_192;
+    const username = userInfo.ok ? (userInfo.user.profile.display_name || userInfo.user.name) : defaultName;
+    const profileImage = userInfo.ok ? (userInfo.user.profile.image_72 || userInfo.user.profile.image_48 || userInfo.user.profile.image_192) : "";
+
+    const payload = {
+      channel: channelId,
+      text: `${message}`,
+      icon_url: profileImage,
+      username: username,
+      mrkdwn: true
+    };
+
+    if (threadTs) {
+      payload.thread_ts = threadTs;
+    }
 
     await fetch("https://slack.com/api/chat.postMessage", {
       method: 'POST',
@@ -37,20 +98,14 @@ export default async function handleMacro(request, env, ctx) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${env.SLACK_BOT_TOKEN}`,
       },
-      body: JSON.stringify({
-        channel: body.channel_id,
-        text: `${message}`,
-        icon_url: profileImage,
-        username: username,
-        mrkdwn: true
-      }),
+      body: JSON.stringify(payload),
     })
   };
 
   ctx.waitUntil((async () => {
     // console.log(":51")
     const macroJson = await macros.json();
-    const [macroKey, ...args] = (body.text || "").trim().split(/\s+/);
+    const [macroKey, ...args] = (macroText || "").trim().split(/\s+/);
     try {
       // copilot: line 53, 56
       const matchedMacro = macroJson.commands.find(cmd => cmd.abbreviation === macroKey);
