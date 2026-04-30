@@ -91,7 +91,7 @@ export default async function handleMacro(request, env, ctx) {
             variables: {
               eventId: env.ACKEE_EVENT_ID, // Use the specific Event ID here!
               input: {
-                key: `macro_${ackeeMacroName || "unknown"}`,
+                key: `${ackeeMacroName || "Macro Executed (unknown)"}`,
                 value: 1
               }
             }
